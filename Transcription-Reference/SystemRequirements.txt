@@ -1,0 +1,8 @@
+========================
+SYSTEM REQUIREMENTS
+========================
+
+    * Java Runtime Environment version 8 or higher
+    * Microsoft Windows 7 or 10 (32-bit or 64-bit)
+    * Minimum 2GHz CPU
+    * Minimum 1G RAM

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="Transcription-Reference" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Transcription-Reference.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
+
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
+
+      -pre-init:                 called before initialization of project properties
+      -post-init:                called after initialization of project properties
+      -pre-compile:              called before javac compilation
+      -post-compile:             called after javac compilation
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-jar:                  called before JAR building
+      -post-jar:                 called after JAR building
+      -post-clean:               called after cleaning build products
+
+    (Targets beginning with '-' are not intended to be called on their own.)
+
+    Example of inserting an obfuscator after compilation could look like this:
+
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
+
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
+
+
+    Another way to customize the build is by overriding existing main targets.
+    The targets of interest are: 
+
+      -init-macrodef-javac:     defines macro for javac compilation
+      -init-macrodef-junit:     defines macro for junit execution
+      -init-macrodef-debug:     defines macro for class debugging
+      -init-macrodef-java:      defines macro for class execution
+      -do-jar-with-manifest:    JAR building (if you are using a manifest)
+      -do-jar-without-manifest: JAR building (if you are not using a manifest)
+      run:                      execution of project 
+      -javadoc-build:           Javadoc generation
+      test-report:              JUnit report generation
+
+    An example of overriding the target for project execution could look like this:
+
+        <target name="run" depends="Transcription-Reference-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
+
+    Notice that the overridden target depends on the jar target and not only on 
+    the compile target as the regular run target does. Again, for a list of available 
+    properties which you can use, check the target you are overriding in the
+    nbproject/build-impl.xml file. 
+
+    -->
+    <target name="my_init" depends="init">
+        <property name="launch4j.dir" location="../lib/windows/launch4j-3.11" />
+        <taskdef name="launch4j"
+                 classname="net.sf.launch4j.ant.Launch4jTask"
+                 classpath="${launch4j.dir}/launch4j.jar
+                      :${launch4j.dir}/lib/xstream.jar" />
+
+        <property file="build.properties" />
+        <property file="../build.properties" />
+        <path id="cp">
+            <fileset dir="dist">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="dist/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+
+    </target>
+
+    <target name="-post-compile" depends="my_init">
+        <condition property="product_name" 
+                   value="${product.name}_Beta" else="${product.name}"> 
+            <equals arg1="${product.release}" arg2="test" /> 
+        </condition>
+
+        <condition property="request_activator" 
+                   value="${ac.e.requestbeta}" else="${ac.e.request}"> 
+            <equals arg1="${product.release}" arg2="test" /> 
+        </condition>
+
+        <replace dir="${build.classes.dir}" includes="**/*.properties">
+            <replacefilter token="@product_name@" value="${product_name}"/>
+            <replacefilter token="@product_version@" value="${product.version.R}"/>
+            <replacefilter token="@vendor_url@" value="http://www.transcription.com"/>
+            <replacefilter token="@product_activation@" value="${product.activation}"/>
+
+            <replacefilter token="@db_user@" value="${db.user}"/>
+            <replacefilter token="@db_pass@" value="${db.pass}"/>
+            <replacefilter token="@db_engine@" value="${db.engine}"/>
+            <replacefilter token="@schema_version@" value="${schema.version}"/>
+            <replacefilter token="@local_schema@" value="${local.schema}"/>
+
+            <replacefilter token="@smtp_server@" value="${ac.smtp.server}"/>
+            <replacefilter token="@email_address@" value="${request_activator}"/>
+            <replacefilter token="@email_password@" value="${ac.email.password2}"/>
+            <replacefilter token="@email_port@" value="${ac.email.port}"/>
+        </replace>
+    </target>
+
+    <target name="build_launcher_exe" depends="init, my_init, jar">
+        <mkdir dir="dist/installer_files" />
+        <mkdir dir="dist/installer_files/lib" />
+
+        <copy todir="dist/installer_files/lib">
+            <fileset dir="dist/lib" includes="**/*.jar"/>
+        </copy>
+
+        <copy file="${basedir}/src/com/jomac/transcription/reference/resources/referencesplash.png"
+              todir="dist/installer_files" />
+
+        <copy todir="dist/installer_files">
+            <fileset dir="${basedir}/src/com/jomac/transcription/reference/resources/32x32"
+                     includes="reference.*"/>
+        </copy>
+
+        <condition property="headerType" 
+                   value="console" else="gui"> 
+            <equals arg1="${product.release}" arg2="test" /> 
+        </condition>
+
+        <launch4j>
+            <config
+                dontWrapJar="true"
+                headerType="${headerType}"
+                outfile="${basedir}/dist/${ant.project.name}.exe"
+                priority="normal"
+                downloadUrl="http://java.com/inc/BrowserRedirect1.jsp"
+                stayAlive="false"
+                icon="${basedir}/dist/installer_files/reference.ico">
+
+                <jre minVersion="${jre.min.version}"
+                     maxVersion="${jre.max.version}"
+                     runtimeBits="64/32"
+                     jdkPreference="preferJre">
+                    <opt>-splash:images\\referencesplash.png</opt>
+                    <opt>-Xms32M -Xmx512M</opt>
+                </jre>
+
+                <classpath mainClass="${product.main.class}">
+                    <cp>dist/Transcription-reference.jar</cp>
+                </classpath>
+
+                <singleInstance mutexName ="Reference-${product.version.R}"/>
+
+                <versionInfo
+                    fileVersion="0.${product.version.R}"
+                    txtFileVersion="${product.version.R}"
+                    fileDescription="${product.description}"
+                    copyright="2012"
+                    productVersion="0.${product.version.R}"
+                    txtProductVersion="${product.version.R}"
+                    productName="${product.name}"
+                    internalName="${product.name}"
+                    originalFilename="${ant.project.name}.exe"/>
+            </config>
+        </launch4j>
+    </target>
+
+    <target name="build_installer" depends="build_launcher_exe">
+        <copy file="${basedir}/izpack.xml" todir="dist/installer_files" />
+        <copy file="${basedir}/dist/${ant.project.name}.exe" todir="dist/installer_files" />
+        <copy file="${basedir}/SystemRequirements.txt" todir="dist/installer_files" />
+        <copy file="${basedir}/shortcutSpec.xml" todir="dist/installer_files" />
+        <copy file="../Transcription-uninstaller/dist/Transcription-uninstaller.jar" 
+              todir="dist/installer_files" />
+
+        <copy file="dist/Transcription-reference.jar" todir="dist/installer_files"/>
+
+        <replace dir="${dist.dir}" includes="**/*.xml">
+            <replacefilter token="@project_name@" value="${ant.project.name}"/>
+            <replacefilter token="@product_name@" value="${product_name}"/>
+            <replacefilter token="@product_version@" value="${product.version.R}"/>
+            <replacefilter token="@vendor_url@" value="http://www.transcription.com"/>
+        </replace>
+
+        <taskdef name="izpack"
+                 classpath="../../../lib/izpack-standalone-compiler-4.3.5.jar"
+                 classname="com.izforge.izpack.ant.IzPackTask"/>
+        <izpack input="${basedir}/dist/installer_files/izpack.xml"
+                output="${basedir}/dist/${product.name}-${product.version.R}.jar"
+                installerType="standard"
+                basedir="${basedir}/dist/installer_files"/>
+    </target>
+
+    <target name="build_installer_exe" depends="build_installer">
+        <launch4j>
+            <config
+                dontWrapJar="false"
+                headerType="gui"
+                jarPath="${basedir}/dist/${product.name}-${product.version.R}.jar"
+                outfile="${basedir}/dist/${product_name}-${product.version.R}_Setup.exe"
+                priority="normal"
+                downloadUrl="http://java.com/inc/BrowserRedirect1.jsp"
+                stayAlive="false"
+                icon="${basedir}/dist/installer_files/reference.ico">
+
+                <jre minVersion="${jre.min.version}"
+                     maxVersion="${jre.max.version}"
+                     jdkPreference="preferJre"
+                     runtimeBits="64/32"/>
+
+                <versionInfo
+                    fileVersion="0.${product.version.R}"
+                    txtFileVersion="${product.version.R}"
+                    fileDescription="${product.description}"
+                    copyright="2012"
+                    productVersion="0.${product.version.R}"
+                    txtProductVersion="${product.version.R}"
+                    productName="${product.name}"
+                    internalName="${product.name}"
+                    originalFilename="${product.name}-${product.version.R}_Setup.exe"/>
+            </config>
+        </launch4j>
+        
+        <copy file="dist/${product_name}-${product.version.R}_Setup.exe" todir="../dist"/>
+    </target>
+
+    <target name="build_launcher" depends="init, my_init, jar">
+        <property file="../build.properties" />
+        <condition property="headerType" 
+                   value="console" else="gui"> 
+            <equals arg1="${product.release}" arg2="test" /> 
+        </condition>
+
+        <ant antFile="../build_launcher.xml"
+             target="build_launcher">
+
+            <property name="param.outfile"
+                      value="dist/${ant.project.name}.exe" />
+            <property name="param.icon"
+                      value="src/com/jomac/transcription/reference/resources/32x32/reference.ico" />
+
+            <property name="param.Xms"
+                      value="128"/>
+            <property name="param.Xmx"
+                      value="256"/>
+            <property name="param.mainClass"
+                      value="${product.main.class}" />
+            <property name="param.mutexName"
+                      value="${ant.project.name}" />
+            <property name="param.fileVersion"
+                      value="${product.version.R}.0" />
+            <property name="param.txtFileVersion"
+                      value="${product.version.R}" />
+            <property name="param.fileDescription"
+                      value="${product.description}" />
+            <property name="param.copyright"
+                      value="${product.copyright}" />
+            <property name="param.productName"
+                      value="${product.name}" />
+            <property name="param.internalName"
+                      value="${product.name}" />
+            <property name="param.originalFilename"
+                      value="${ant.project.name}.exe" />
+            <property name="param.headertype" 
+                      value="${headerType}" />
+        </ant>
+        <ant antFile="../build_launcher.xml" target="createl4jIni1">
+            <property name="param.l4jIni"
+                      value="dist/${ant.project.name}.l4j.ini" />
+            <property name="param.optConfig"
+                      value=" -splash:images\referencesplash.png"/>
+        </ant>
+    </target>
+
+    <target name="modify_installer_defs" depends="my_init">
+        <replace dir="../build" includes="**/*.xml">
+            <replacefilter token="@reference_splash@" value="${basedir}/src/com/jomac/transcription/reference/resources/referencesplash.png"/>
+            <replacefilter token="@reference_exe@" value="${basedir}/dist/${ant.project.name}.exe"/>
+            <replacefilter token="@reference_l4j_ini@" value="${basedir}/dist/${ant.project.name}.l4j.ini"/>
+        </replace>
+    </target>
+
+    <target name="run" depends="my_init, jar">
+        <java classname="${product.main.class}"
+              fork="yes"
+              dir="${basedir}">
+            <classpath>
+                <path refid="cp"/>
+            </classpath>
+            <jvmarg value="-Xms32m" />
+            <jvmarg value="-Xmx512m" />
+        </java>
+    </target>
+    
+    <target name="debug" depends="my_init, jar">
+        <nbjpdastart addressproperty="jpda.address" name="${project.name}" transport="dt_socket">
+            <classpath>
+                <path refid="cp"/>
+            </classpath>
+        </nbjpdastart>
+
+        <java classname="${product.main.class}"
+              fork="yes"
+              dir="${basedir}">
+            <classpath>
+                <path refid="cp"/>
+            </classpath>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xnoagent"/>
+            <jvmarg value="-Djava.compiler=none"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+            <jvmarg value="-Xms32m" />
+            <jvmarg value="-Xmx512m" />
+        </java>
+    </target>
+</project>

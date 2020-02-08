@@ -1,0 +1,190 @@
+package com.jomac.transcription.reference.forms;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import javax.swing.TransferHandler;
+
+public class SampleQueryDialog extends javax.swing.JDialog {
+
+    private boolean test = false;
+
+    public SampleQueryDialog(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        setLocationRelativeTo(parent);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("");
+        builder.append("<html><body>");
+        builder.append("<b>Use asterisk (*) character to refine search.</b><br/>");
+        builder.append("<b>Use plus (+) sign for multiple word search.</b><br/>");
+        builder.append("<br/><b>Example:</b><br/>");
+        builder.append("<table align = \"center\" border=\"1\" width=\"98%\">");
+        builder.append("<tr><td width=\"30%\"><b>Wild Card Search</b></td>");
+        builder.append("<td width=\"70%\">Use asterisk(*) Character to refine search</td>");
+        builder.append("</tr><tr>");
+        builder.append("<td><b>ph*</b></td>");
+        builder.append("<td>will show results that starts with \"ph\".</td></tr>");
+        builder.append("<td><b>*ph</b></td>");
+        builder.append("<td>will show resutls that ends with \"ph\".</td></tr>");
+        builder.append("<tr><td><b>li or *li*</b></td>");
+        builder.append("<td>will show results that contains \"li\".</td></tr>");
+        builder.append("<tr><td><b>p*e</b></td>");
+        builder.append("<td>will show results that starts with \"p\" and ends with \"e\".</td></tr>");
+        builder.append("<tr><td><b>p*l*e</b></td>");
+        builder.append("<td>will show results that starts with \"p\" contains \"l\" and ends with \"e\".</td></tr>");
+        builder.append("<tr><td><b>*l*e</b></td>");
+        builder.append("<td>will show results that contains \"l\" and ends with \"e\"</td></tr>");
+        builder.append("<tr><td><b>p*l*</b></td>");
+        builder.append("<td>will show results that starts with \"p\" and contains \"l\".</td></tr>");
+        builder.append("<tr></td><td></td></tr>");
+        builder.append("<tr><b>Multi-Word Search</b></td>");
+        builder.append("<td>Use plus(+) for multi word search.</td></tr>");
+        builder.append("<tr><td><b>patient + disease + hospital </b></td>");
+        builder.append("<td>will show results that contains the words \"patient\",<br>\"disesase\" and \"Hospital\".</td></tr>");
+        builder.append("<tr><td><b>pat* + disease + *tal</b></td>");
+        builder.append("<td>will show results with words that starts with \"pat\",<br>the word \"disease\" and words that end with \"tal\"</td>");
+        builder.append("<tr></td><td></td></tr>");
+        builder.append("<tr><b>Double Quote Search</b></td>");
+        builder.append("<td>");
+        builder.append("• Use double quote(\"\") for a combination of wildcard and Multi-word Searches <br/>");
+        builder.append("• Put spaces in before the asterisk sign(*) to show the words in between the phrase. <br/>");
+        builder.append("• Putting a number after the asterisk sign (*) will include the number of words to include in the search in between the two words before it.<br/>");
+        builder.append("• Number range to place beside an asterisk sign(*) is one(1) to five(5).</td></tr>");
+        builder.append("<tr><b>\"stroke, rheumatic * disease\"</b></td>");
+        builder.append("<td>will show phrases that contains the words \"stroke\", followed by a comma (,) ");
+        builder.append("and the words \"rheumatic\", \"disease\" plus the words in between them</td></tr>");
+        builder.append("<tr><b>\"visual * appendix\"</b></td>");
+        builder.append("<td>will show phrases that contains the word \"visualize\", \"appendix\" and the words or characters between them.</td></tr>");
+        builder.append("<tr><b>degenerative + \"in * mid\"</b></td>");
+        builder.append("<td>will show phrases with the words \"degenerative\" with succeeding phrases that contains \"in\", \"mid\" ");
+        builder.append("and the words or characters in between them</td></tr>");
+        builder.append("<tr><b>\"visual *2 disorientation\"</b></td>");
+        builder.append("<td>will show phrases that contains the words \"visual\", \"disorientation\" and two (2) words in between them. ");
+        builder.append("\"unremarkable *3 awake\"	will show phrases that contains the words \"unremarkable\", \"awake\" and three (3) words in between them.</td></tr>");
+        builder.append("</tr></table>");
+        builder.append("</body></html>");
+
+        epDisplay.setText(builder.toString());
+        epDisplay.setCaretPosition(0);
+    }
+
+    public void setTestDiaglog(boolean test) {
+        this.test = test;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        popMenu = new javax.swing.JPopupMenu();
+        miCopySelected = new javax.swing.JMenuItem();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        epDisplay = new javax.swing.JEditorPane();
+
+        miCopySelected.setText("Copy to clipboard");
+        miCopySelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCopySelectedActionPerformed(evt);
+            }
+        });
+        popMenu.add(miCopySelected);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(680, 480));
+        setUndecorated(true);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
+            }
+        });
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        jScrollPane2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        epDisplay.setEditable(false);
+        epDisplay.setBorder(null);
+        epDisplay.setContentType("text/html"); // NOI18N
+        epDisplay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                epDisplayMouseReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(epDisplay);
+
+        getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void epDisplayMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_epDisplayMouseReleased
+        if (evt.isPopupTrigger()) {
+            popMenu.show(epDisplay, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_epDisplayMouseReleased
+
+    private void miCopySelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCopySelectedActionPerformed
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        TransferHandler transferHandler = epDisplay.getTransferHandler();
+        transferHandler.exportToClipboard(epDisplay, clipboard, TransferHandler.COPY);
+    }//GEN-LAST:event_miCopySelectedActionPerformed
+
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        if (test) {
+            System.exit(0);
+        } else {
+            dispose();
+        }
+    }//GEN-LAST:event_formWindowLostFocus
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SampleQueryDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SampleQueryDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SampleQueryDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SampleQueryDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                SampleQueryDialog dialog = new SampleQueryDialog(new javax.swing.JFrame(), true);
+                dialog.setTestDiaglog(true);
+                dialog.setVisible(true);
+            }
+        });
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JEditorPane epDisplay;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JMenuItem miCopySelected;
+    private javax.swing.JPopupMenu popMenu;
+    // End of variables declaration//GEN-END:variables
+}

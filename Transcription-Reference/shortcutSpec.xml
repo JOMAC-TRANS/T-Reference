@@ -1,0 +1,44 @@
+<shortcuts>
+    <skipIfNotSupported/>
+
+    <programGroup
+        defaultName="@product_name@"
+        location="applications"/>
+
+    <shortcut
+        name="TransRef"
+        target="$INSTALL_PATH/@project_name@.exe"
+        commandLine=""
+        workingDirectory="$INSTALL_PATH"
+        description="A reference program."
+        iconIndex="0"
+        initialState="noShow"
+        programGroup="yes"
+        desktop="yes"
+        applications="no"
+        startMenu="no"
+        startup="no"
+        os='windows'>
+    </shortcut>
+
+    <shortcut
+        name="Uninstall @product_name@"
+        target="$INSTALL_PATH/Uninstaller/Transcription-uninstaller.jar"
+        commandLine="T.Reference"
+        workingDirectory=""
+        description="Uninstall @product_name@"
+        iconFile="%SystemRoot%\system32\SHELL32.dll"
+        iconIndex="32"
+        initialState="noShow"
+        programGroup="yes"
+        desktop="no"
+        applications="no"
+        startMenu="no"
+        startup="no"
+        type="Application"
+        os='windows'
+        encoding="UTF-8">
+        <createForPack name="@product_name@" />
+    </shortcut>
+
+</shortcuts>

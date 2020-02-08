@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+	
+
+    <info>
+        <appname>@product_name@</appname>
+        <appversion>version</appversion>
+        <url>@vendor_url@</url>
+        <javaversion>1.6</javaversion>
+        <run-privileged condition="izpack.windowsinstall.vista"/>
+    </info>
+	
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="no">
+      <modifier key="useButtonIcons" value="yes"/>
+      <modifier key="useLabelIcons" value="yes"/>
+      <modifier key="layoutAnchor" value="NORTHWEST"/>
+      <modifier key="labelGap" value="2"/>
+      <modifier key="useHeadingPanel" value="yes"/>
+      <modifier key="headingLineCount" value="1"/>
+      <modifier key="headingFontSize" value="1.5"/>
+      <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+      <modifier key="headingPanelCounter" value="progressbar"/>
+      <modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
+    </guiprefs>
+
+    <variables>
+        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+    </variables>
+
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+    
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+       <!--<res id="LicencePanel.licence" src="Licence.txt"/>-->
+       <res id="InfoPanel.info" src="SystemRequirements.txt"/>
+       <!--<res id="Installer.image" src="nice-image.png" />-->
+       <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
+       <res id="Heading.image" src="activator.png"/>
+       <!--<res src="shortcut_unix.xml" id="Unix_shortcutSpec.xml"/>-->
+    </resources>
+    
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <!-- The listeners section for CustomActions -->
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Activator" required="yes">
+            <description>An Activator program.</description>
+            <fileset dir="lib"
+                includes="**/*"
+                targetdir="$INSTALL_PATH/dist/lib" />
+            <file src="activatorsplash.png" targetdir="$INSTALL_PATH/images" />
+            <file src="@project_name@.exe" targetdir="$INSTALL_PATH"/>
+            <file src="@project_name@.jar" targetdir="$INSTALL_PATH/dist"/>
+            <file src="Transcription-uninstaller.jar" targetdir= "$INSTALL_PATH/Uninstaller"/>
+        </pack>
+    </packs>
+    
+    <!-- The native libraries to add -->
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+
+    <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+        <os family="windows"/>
+    </native>
+
+</installation>
