@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 public class Reference extends EngineConnector {
 
-    private ResourceBundle bundle = Main.getResourceBundle();
+    private final ResourceBundle bundle = Main.getResourceBundle();
 
     public Reference() {
         String engine = bundle.getString("db_engine");

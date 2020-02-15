@@ -8,8 +8,8 @@ import com.jomac.transcription.referencebuilder.jpa.models.WorkTypeBean;
 
 public class DictatorWorkTypeQueries {
 
-    private DictatorWorkTypeBeanJpaController DICTATOR_WORKTYP_CONTROLLER = new DictatorWorkTypeBeanJpaController(
-            new Reference().getEMFactory());
+    private final DictatorWorkTypeBeanJpaController DICTATOR_WORKTYP_CONTROLLER
+            = new DictatorWorkTypeBeanJpaController(new Reference().getEMFactory());
 
     public boolean save(DictatorWorkTypeBean bean) {
         return DICTATOR_WORKTYP_CONTROLLER.create(bean);
@@ -31,6 +31,5 @@ public class DictatorWorkTypeQueries {
         } else {
             System.out.println("not null");
         }
-
     }
 }

@@ -10,7 +10,6 @@ import com.hccs.forms.components.FileDragDropCallback;
 import com.hccs.forms.components.FileDragDropHandler;
 import com.hccs.util.ComponentUtils;
 import com.hccs.util.FileUtilities;
-import com.hccs.util.MimeUtils;
 import com.hccs.util.Task;
 import com.hccs.util.TaskThread;
 import com.jomac.transcription.referencebuilder.Main;
@@ -28,7 +27,7 @@ import com.jomac.transcription.referencebuilder.queries.WorkTypeQueries;
 import com.jomac.transcription.referencebuilder.utilities.FileReader;
 import java.awt.*;
 import java.io.File;
-import java.util.Collection;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
@@ -47,8 +46,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         READY, DONE, EMPTY, ERROR
     }
-    private FileNameExtensionFilter fileExtension = new FileNameExtensionFilter(
-            "Document files files (*.doc)", "doc");
+    private FileNameExtensionFilter file_docx = new FileNameExtensionFilter(
+            "Word Document (*.docx)", "docx");
+    private FileNameExtensionFilter file_doc = new FileNameExtensionFilter(
+            "Word 97-2003 Document (*.doc)", "doc");
 
     public MainFrame() {
         initComponents();
@@ -106,8 +107,10 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        fcOpen.removeChoosableFileFilter(fileExtension);
-        fcOpen.setFileFilter(fileExtension);
+        fcOpen.removeChoosableFileFilter(file_doc);
+        fcOpen.setFileFilter(file_doc);
+        fcOpen.removeChoosableFileFilter(file_docx);
+        fcOpen.setFileFilter(file_docx);
         reference = new Reference();
     }
 
@@ -162,17 +165,20 @@ public class MainFrame extends javax.swing.JFrame {
             }
             return false;
         }
-        Collection _mimeTypes = MimeUtils.getMimeTypes(xx);
+
         String[] name = FileUtilities.getBaseAndExtension(xx);
         if (name[1] != null) {
-            if (name[1].equals("docx")) {
-                System.out.println("DOCX: " + xx);
-//                return false;
-                return true;
-            }
-
             if (!xx.isHidden()) {
-                valid = (name[1].equals("doc") && _mimeTypes.contains("application/msword"));
+                String mimeType;
+                try {
+                    mimeType = Files.probeContentType(xx.toPath());
+                    System.out.println("Type: " + mimeType);
+                } catch (Exception e) {
+                    mimeType = "";
+                }
+                valid = (name[1].equals("docx")
+                        && mimeType.contains("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                        || name[1].equals("doc") && mimeType.contains("application/msword"));
             }
         }
 
@@ -223,6 +229,8 @@ public class MainFrame extends javax.swing.JFrame {
                 content = "";
             }
         }
+
+        System.out.println("Content: \n" + content);
 
         return content;
     }

@@ -6,8 +6,8 @@ import com.jomac.transcription.referencebuilder.jpa.models.WorkTypeBean;
 
 public class WorkTypeQueries {
 
-    WorkTypeBeanJpaController WORKTYPE_QUERY = new WorkTypeBeanJpaController(
-            new Reference().getEMFactory());
+    WorkTypeBeanJpaController WORKTYPE_QUERY
+            = new WorkTypeBeanJpaController(new Reference().getEMFactory());
 
     public boolean save(WorkTypeBean bean) {
         return WORKTYPE_QUERY.create(bean);

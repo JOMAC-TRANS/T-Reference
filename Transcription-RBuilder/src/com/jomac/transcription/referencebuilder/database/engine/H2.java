@@ -36,6 +36,7 @@ public class H2 implements IDatabase {
         return H2EMFactory.getInstance().getEMFactory();
     }
 
+    @Override
     public void createDB() throws Exception {
         Connection con;
         Statement stmt;
@@ -72,6 +73,7 @@ public class H2 implements IDatabase {
         con.close();
     }
 
+    @Override
     public void zipDB() {
         try {
             FileUtilities.zipDirectory(
@@ -82,6 +84,7 @@ public class H2 implements IDatabase {
         }
     }
 
+    @Override
     public boolean deleteDB() {
         DeleteDbFiles.execute(DB_PATH, DB_NAME, true);
 
@@ -92,6 +95,7 @@ public class H2 implements IDatabase {
         return true;
     }
 
+    @Override
     public void cleanUp() {
         try {
             Connection con = getConnection(true);
@@ -106,6 +110,7 @@ public class H2 implements IDatabase {
         }
     }
 
+    @Override
     public Connection getConnection() throws Exception {
         return getConnection(false);
     }
@@ -126,6 +131,7 @@ public class H2 implements IDatabase {
         return conn;
     }
 
+    @Override
     public void closeConnection() {
         try {
             if (conn != null && !conn.isClosed()) {

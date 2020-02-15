@@ -6,8 +6,8 @@ import com.jomac.transcription.referencebuilder.jpa.models.SpecificBean;
 
 public class SpecificQueries {
 
-    SpecificBeanJpaController SPECIFIC_QUERY = new SpecificBeanJpaController(
-            new Reference().getEMFactory());
+    SpecificBeanJpaController SPECIFIC_QUERY
+            = new SpecificBeanJpaController(new Reference().getEMFactory());
 
     public boolean save(SpecificBean bean) {
         return SPECIFIC_QUERY.create(bean);

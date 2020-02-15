@@ -35,17 +35,14 @@ public class Main {
             JDialog.setDefaultLookAndFeelDecorated(true);
             UIManager.setLookAndFeel(
                     Preferences.userRoot().node(TRANSCRIPTION_STORAGE).get(
-                    "mainframe.lookAndFeel",
-                    UIManager.getSystemLookAndFeelClassName()));
+                            "mainframe.lookAndFeel",
+                            UIManager.getSystemLookAndFeelClassName()));
         } catch (Exception ex) {
         }
 
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                mainframe = new MainFrame();
-                mainframe.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            mainframe = new MainFrame();
+            mainframe.setVisible(true);
         });
     }
 

@@ -6,8 +6,8 @@ import com.jomac.transcription.referencebuilder.jpa.models.DictatorBean;
 
 public class DictatorQueries {
 
-    DictatorBeanJpaController DICTATOR_QUERY = new DictatorBeanJpaController(
-            new Reference().getEMFactory());
+    DictatorBeanJpaController DICTATOR_QUERY
+            = new DictatorBeanJpaController(new Reference().getEMFactory());
 
     public boolean save(DictatorBean bean) {
         return DICTATOR_QUERY.create(bean);

@@ -17,10 +17,8 @@ public abstract class FileReader {
             return new PlainTextExtractor(document);
         } else if (document.getName().toLowerCase().endsWith(".doc")) {
             return new WordTextExtractor(document);
-        } else if (document.getName().toLowerCase().endsWith(".docx")){
-            //TODO: 
-            System.out.println("extrating docx!");
-            return new WordTextExtractor(document);
+        } else if (document.getName().toLowerCase().endsWith(".docx")) {
+            return new DocXExtractor(document);
         }
         return null;
     }

@@ -10,20 +10,20 @@ import javax.persistence.Persistence;
 
 public class H2EMFactory {
 
-    private EntityManagerFactory emf;
-    private ResourceBundle bundle = Main.getResourceBundle();
+    private final EntityManagerFactory EMF;
+    private final ResourceBundle bundle = Main.getResourceBundle();
 
     public H2EMFactory() {
         String dbPath_ = System.getProperty("user.dir").concat(File.separator).concat("db")
                 .concat(File.separator).concat(bundle.getString("db_name"));
-        Map<String, String> properties = new WeakHashMap<String, String>();
+        Map<String, String> properties = new WeakHashMap<>();
         properties.put("javax.persistence.jdbc.url",
                 "jdbc:h2:" + dbPath_ + ";IFEXISTS=TRUE");
         properties.put("javax.persistence.jdbc.user", bundle.getString("db_user"));
         properties.put("javax.persistence.jdbc.password", bundle.getString("db_pass"));
         properties.put("javax.persistence.jdbc.driver", "org.h2.Driver");
 
-        emf = Persistence.createEntityManagerFactory("Transcription-ReferenceBuilderPU", properties);
+        EMF = Persistence.createEntityManagerFactory("Transcription-ReferenceBuilderPU", properties);
     }
 
     public static H2EMFactory getInstance() {
@@ -36,6 +36,6 @@ public class H2EMFactory {
     }
 
     public EntityManagerFactory getEMFactory() {
-        return emf;
+        return EMF;
     }
 }
