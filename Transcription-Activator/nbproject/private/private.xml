@@ -18,5 +18,9 @@
             <file>file:/C:/Work/JOMAC/transcription/client/Standalone-edition/Transcription-Activator/src/com/jomac/transcription/activator/forms/ActivatorForm.java</file>
             <file>file:/C:/Work/JOMAC/transcription/client/Standalone-edition/Transcription-Activator/src/com/jomac/transcription/activator/Main.java</file>
         </group>
+        <group name="Git_TR">
+            <file>file:/C:/Work/SCCS/JOMAC/T-Reference/Transcription-Activator/src/com/jomac/transcription/activator/forms/ActivatorForm.java</file>
+            <file>file:/C:/Work/SCCS/JOMAC/T-Reference/Transcription-Activator/src/com/jomac/transcription/activator/controller/ActivatorController.java</file>
+        </group>
     </open-files>
 </project-private>
