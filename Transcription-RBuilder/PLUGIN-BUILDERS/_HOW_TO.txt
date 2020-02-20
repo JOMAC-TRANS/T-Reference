@@ -1,0 +1,36 @@
+* Select which plugin Account to be build
+	i.e. BAY
+
+* Run <Application>.bat / BAY.bat
+	An application will run with Console on the background
+
+* Prepare the documents need to be build
+
+* Follow these format
+	<Facility>\<Dictator>\Work Type #\docs...
+	
+* To add note on each Work Type; add the 999999.doc inside the Work Type folder
+	<Facility>\<Dictator>\Work Type #\999999.doc
+
+* Go to the parent folder of Facility folder and drag it to JOMAC Reference Builder-<Account>
+	Wait for all buttons to be enable
+	Check for total number of results
+
+* <Optional> Click Add button to add more documents
+
+* <Optional> Select a path and click Remove button to remove it on the queue
+
+* <Optional> To remove all documents on the queue
+
+* Click Convert button to start to build the plugin
+
+* Check the application documents status
+	You may click the Status column to sort out the status
+
+* Check for windows console for any failed process
+
+* Finally, On the parent forder of <Application>.bat you will find "db" folder
+
+* Check what inside the folder
+	reference_<account>.h2.db -> use for TransRef application
+	reference_<account>.zip -> use for Dropbox > JT > TR

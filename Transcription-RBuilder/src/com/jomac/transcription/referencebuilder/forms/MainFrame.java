@@ -40,7 +40,7 @@ public class MainFrame extends javax.swing.JFrame {
     private boolean converting;
     private Preferences preferences;
     private DefaultTableModel model;
-    private Reference reference;
+    private final Reference reference;
 
     private enum Status {
 
@@ -172,7 +172,6 @@ public class MainFrame extends javax.swing.JFrame {
                 String mimeType;
                 try {
                     mimeType = Files.probeContentType(xx.toPath());
-                    System.out.println("Type: " + mimeType);
                 } catch (Exception e) {
                     mimeType = "";
                 }
@@ -230,8 +229,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
 
-        System.out.println("Content: \n" + content);
-
+//        System.out.println("Content: \n" + content);
         return content;
     }
 
@@ -268,7 +266,7 @@ public class MainFrame extends javax.swing.JFrame {
         mnuHelp = new javax.swing.JMenu();
         miDetails = new javax.swing.JMenuItem();
 
-        fcOpen.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        fcOpen.setFileSelectionMode(javax.swing.JFileChooser.FILES_AND_DIRECTORIES);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -369,8 +367,10 @@ public class MainFrame extends javax.swing.JFrame {
         });
         tblList.setEditable(false);
         jScrollPane3.setViewportView(tblList);
-        tblList.getColumnModel().getColumn(1).setPreferredWidth(60);
-        tblList.getColumnModel().getColumn(1).setMaxWidth(120);
+        if (tblList.getColumnModel().getColumnCount() > 0) {
+            tblList.getColumnModel().getColumn(1).setPreferredWidth(60);
+            tblList.getColumnModel().getColumn(1).setMaxWidth(120);
+        }
 
         jPanel2.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
@@ -631,7 +631,8 @@ public class MainFrame extends javax.swing.JFrame {
                                     || accnt.contains("HOSPITAL");
                         }
                         if (getPath) {
-                            if (xx.getName().equalsIgnoreCase(("999999.doc")) && (x + 2 >= path.length)) {
+                            if ((xx.getName().equalsIgnoreCase("999999.doc")
+                                    || xx.getName().equalsIgnoreCase("999999.docx")) && (x + 2 >= path.length)) {
                                 System.out.println("99: " + xx);
                                 SpecificBean spBean = new SpecificBean();
                                 spBean.setDictatorworktypeid(null);

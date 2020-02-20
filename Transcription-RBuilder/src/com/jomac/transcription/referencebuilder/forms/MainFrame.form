@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.swing.JFileChooser" name="fcOpen">
       <Properties>
-        <Property name="fileSelectionMode" type="int" value="1"/>
+        <Property name="fileSelectionMode" type="int" value="2"/>
       </Properties>
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
