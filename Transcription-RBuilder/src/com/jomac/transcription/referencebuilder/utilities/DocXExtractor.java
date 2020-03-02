@@ -8,13 +8,16 @@ package com.jomac.transcription.referencebuilder.utilities;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigInteger;
+import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 public class DocXExtractor extends FileReader {
 
-    XWPFWordExtractor wordExtractor;
+    private List<XWPFParagraph> paragraphList;
+    private StringBuilder sb;
     private InputStream is;
     private boolean encripted;
 
@@ -27,9 +30,10 @@ public class DocXExtractor extends FileReader {
         boolean result = true;
 
         try {
+            sb = new StringBuilder();
             is = new FileInputStream(document);
             XWPFDocument xwpDoc = new XWPFDocument(is);
-            wordExtractor = new XWPFWordExtractor(xwpDoc);
+            paragraphList = xwpDoc.getParagraphs();
             encripted = false;
         } catch (EncryptedDocumentException ex) {
             encripted = true;
@@ -62,6 +66,32 @@ public class DocXExtractor extends FileReader {
 
     @Override
     public String extractText() {
-        return wordExtractor.getText();
+
+        int[] levelCurrentValues = new int[]{0, 0, 0};
+        for (XWPFParagraph paragraph : paragraphList) {
+            String levelText = paragraph.getNumLevelText();
+            BigInteger levelDepth = paragraph.getNumIlvl();
+
+            if (levelText != null) {
+                levelCurrentValues[levelDepth.intValue()] += 1;
+
+                levelText = levelText.replace("%1", "" + levelCurrentValues[0]);
+                levelText = levelText.replace("%2", "" + levelCurrentValues[1]);
+                levelText = levelText.replace("%3", "" + levelCurrentValues[2]);
+                sb.append(levelText).append(" ").append(paragraph.getText()).append("\n");
+            } else {
+                if (!paragraph.getText().trim().isEmpty() && ("Heading1".equalsIgnoreCase(paragraph.getStyle()))) {
+                    sb.append("<b>");
+                    sb.append(paragraph.getText());
+                    sb.append("</b>").append("\n");
+                } else {
+                    sb.append(paragraph.getText()).append("\n");
+                }
+            }
+        }
+
+        System.out.println(sb.toString());
+
+        return sb.toString();
     }
 }
