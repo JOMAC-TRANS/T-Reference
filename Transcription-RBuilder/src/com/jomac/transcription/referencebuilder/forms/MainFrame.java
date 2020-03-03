@@ -221,7 +221,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (fr != null) {
             if (fr.openDocument()) {
-                fr.extractText();
                 content = fr.extractText();
                 fr.closeDocument();
             } else if (fr.encryptedFile()) {
@@ -734,20 +733,23 @@ public class MainFrame extends javax.swing.JFrame {
                                     model.setValueAt(Status.EMPTY, i, 1);
                                     continue;
                                 }
-                                if (content.contains("<")) {
-                                    if (content.contains("\r\r</")) {
-                                        content = content.replaceAll("\r\r</", "\r</");
-                                    }
-                                    if (content.contains("\r</")) {
-                                        content = content.replaceAll("\r</", "\n\n</");
-                                        System.out.println("Replacing \\r  to \\n  on " + xx.getPath());
-                                    }
+
+                                if (!xx.getName().endsWith(".docx")) {
+                                    if (content.contains("<")) {
+                                        if (content.contains("\r\r</")) {
+                                            content = content.replaceAll("\r\r</", "\r</");
+                                        }
+                                        if (content.contains("\r</")) {
+                                            content = content.replaceAll("\r</", "\n\n</");
+                                            System.out.println("Replacing \\r  to \\n  on " + xx.getPath());
+                                        }
 //                                content = content.replaceAll("<", "&lt;");
-                                    content = content.replaceAll("</", "<b>");
-                                }
-                                if (content.contains(">")) {
+                                        content = content.replaceAll("</", "<b>");
+                                    }
+                                    if (content.contains(">")) {
 //                                content = content.replaceAll(">", "&gt;");
-                                    content = content.replaceAll("/>", "</b>");
+                                        content = content.replaceAll("/>", "</b>");
+                                    }
                                 }
 
                                 bean.setDocument(content);

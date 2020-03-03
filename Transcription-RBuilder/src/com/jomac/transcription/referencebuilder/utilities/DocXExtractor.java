@@ -68,6 +68,7 @@ public class DocXExtractor extends FileReader {
     public String extractText() {
 
         int[] levelCurrentValues = new int[]{0, 0, 0};
+//        boolean errorFormat = true;
         for (XWPFParagraph paragraph : paragraphList) {
             String levelText = paragraph.getNumLevelText();
             BigInteger levelDepth = paragraph.getNumIlvl();
@@ -80,18 +81,20 @@ public class DocXExtractor extends FileReader {
                 levelText = levelText.replace("%3", "" + levelCurrentValues[2]);
                 sb.append(levelText).append(" ").append(paragraph.getText()).append("\n");
             } else {
-                if (!paragraph.getText().trim().isEmpty() && ("Heading1".equalsIgnoreCase(paragraph.getStyle()))) {
-                    sb.append("<b>");
+                if ((!paragraph.getText().trim().isEmpty() && ("Heading1".equalsIgnoreCase(paragraph.getStyle())))
+                        || (paragraph.getStyle() == null && paragraph.getCTP().getPPr().getRPr() != null
+                        && paragraph.getCTP().getPPr().getRPr().isSetB())) {
+                    sb.append(sb.toString().isEmpty() ? "<b>" : "\n<b>");
                     sb.append(paragraph.getText());
                     sb.append("</b>").append("\n");
+//                    errorFormat = false;
                 } else {
                     sb.append(paragraph.getText()).append("\n");
                 }
             }
         }
 
-        System.out.println(sb.toString());
-
         return sb.toString();
+//        return errorFormat ? "" : sb.toString();
     }
 }

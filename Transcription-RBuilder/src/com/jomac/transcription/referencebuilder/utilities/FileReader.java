@@ -15,10 +15,10 @@ public abstract class FileReader {
 
         if (document.getName().toLowerCase().endsWith(".html")) {
             return new PlainTextExtractor(document);
-        } else if (document.getName().toLowerCase().endsWith(".doc")) {
-            return new WordTextExtractor(document);
         } else if (document.getName().toLowerCase().endsWith(".docx")) {
             return new DocXExtractor(document);
+        } else if (document.getName().toLowerCase().endsWith(".doc")) {
+            return new WordTextExtractor(document);
         }
         return null;
     }
