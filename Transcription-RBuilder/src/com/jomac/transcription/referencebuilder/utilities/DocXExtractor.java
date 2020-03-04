@@ -67,21 +67,14 @@ public class DocXExtractor extends FileReader {
     @Override
     public String extractText() {
 
-        int[] levelCurrentValues = new int[]{0, 0, 0};
 //        boolean errorFormat = true;
         for (XWPFParagraph paragraph : paragraphList) {
-            String levelText = paragraph.getNumLevelText();
-            BigInteger levelDepth = paragraph.getNumIlvl();
-
-            if (levelText != null) {
-                levelCurrentValues[levelDepth.intValue()] += 1;
-
-                levelText = levelText.replace("%1", "" + levelCurrentValues[0]);
-                levelText = levelText.replace("%2", "" + levelCurrentValues[1]);
-                levelText = levelText.replace("%3", "" + levelCurrentValues[2]);
-                sb.append(levelText).append(" ").append(paragraph.getText()).append("\n");
+            if (paragraph.getNumLevelText() != null) {
+                sb.append(" ").append("\u2022").append(" ")
+                        .append(paragraph.getText()).append("\n");
             } else {
-                if ((!paragraph.getText().trim().isEmpty() && ("Heading1".equalsIgnoreCase(paragraph.getStyle())))
+                if ((!paragraph.getText().trim().isEmpty()
+                        && ("Heading1".equalsIgnoreCase(paragraph.getStyle())))
                         || (paragraph.getStyle() == null && paragraph.getCTP().getPPr().getRPr() != null
                         && paragraph.getCTP().getPPr().getRPr().isSetB())) {
                     sb.append(sb.toString().isEmpty() ? "<b>" : "\n<b>");
